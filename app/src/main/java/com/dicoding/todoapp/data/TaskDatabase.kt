@@ -4,7 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.dicoding.todoapp.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -33,7 +37,22 @@ abstract class TaskDatabase : RoomDatabase() {
                     context.applicationContext,
                     TaskDatabase::class.java,
                     "task.db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .addCallback(object :Callback(){
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+                            super.onCreate(db)
+                            INSTANCE?.let { database ->
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    fillWithStartingData(
+                                        context.applicationContext,
+                                        database.taskDao()
+                                    )
+                                }
+                            }
+                        }
+                    })
+                    .build()
                 INSTANCE = instance
                 instance
             }
