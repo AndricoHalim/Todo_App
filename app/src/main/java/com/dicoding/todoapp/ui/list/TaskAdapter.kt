@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -66,6 +67,7 @@ class TaskAdapter(
             itemView.setOnClickListener {
                 val detailIntent = Intent(itemView.context, DetailTaskActivity::class.java)
                 detailIntent.putExtra(TASK_ID, task.id)
+                Toast.makeText(itemView.context, "Task Detail", Toast.LENGTH_SHORT).show()
                 itemView.context.startActivity(detailIntent)
             }
             cbComplete.setOnClickListener {
