@@ -52,6 +52,9 @@ class TaskActivity : AppCompatActivity() {
         taskViewModel.tasks.observe(this, Observer(this::showRecyclerView))
 
         //TODO 15 : Fixing bug : snackBar not show when task completed
+        taskViewModel.snackbarText.observe(this){snackBar ->
+            showSnackBar(snackBar)
+        }
     }
 
     private fun showRecyclerView(task: PagedList<Task>) {
@@ -61,7 +64,6 @@ class TaskActivity : AppCompatActivity() {
         }
         adapterTask.submitList(task)
         recycler.adapter = adapterTask
-
     }
 
     private fun showSnackBar(eventMessage: Event<Int>) {
