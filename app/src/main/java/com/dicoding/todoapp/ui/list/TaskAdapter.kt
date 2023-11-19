@@ -1,6 +1,7 @@
 package com.dicoding.todoapp.ui.list
 
 import android.content.Intent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -13,6 +14,9 @@ import com.dicoding.todoapp.data.Task
 import com.dicoding.todoapp.ui.detail.DetailTaskActivity
 import com.dicoding.todoapp.utils.DateConverter
 import com.dicoding.todoapp.utils.TASK_ID
+import com.dicoding.todoapp.ui.list.TaskTitleView.Companion.DONE
+import com.dicoding.todoapp.ui.list.TaskTitleView.Companion.NORMAL
+import com.dicoding.todoapp.ui.list.TaskTitleView.Companion.OVERDUE
 
 class TaskAdapter(
     private val onCheckedChange: (Task, Boolean) -> Unit
@@ -20,24 +24,29 @@ class TaskAdapter(
 
     //TODO 8 : Create and initialize ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        throw NotImplementedError("Not yet implemented")
+        val itemTask = LayoutInflater.from(parent.context).inflate(R.layout.task_item,parent,false)
+        return TaskViewHolder(itemTask)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = getItem(position) as Task
         //TODO 9 : Bind data to ViewHolder (You can run app to check)
+        holder.bind(task)
         when {
             //TODO 10 : Display title based on status using TitleTextView
             task.isCompleted -> {
                 //DONE
+                holder.tvTitle.state = DONE
                 holder.cbComplete.isChecked = true
             }
             task.dueDateMillis < System.currentTimeMillis() -> {
                 //OVERDUE
+                holder.tvTitle.state = OVERDUE
                 holder.cbComplete.isChecked = false
             }
             else -> {
                 //NORMAL
+                holder.tvTitle.state = NORMAL
                 holder.cbComplete.isChecked = false
             }
         }
