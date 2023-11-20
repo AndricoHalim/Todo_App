@@ -33,7 +33,7 @@ class TaskActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { _ ->
             val addIntent = Intent(this, AddTaskActivity::class.java)
             startActivity(addIntent)
         }
@@ -135,7 +135,6 @@ class TaskActivity : AppCompatActivity() {
                 val task = (viewHolder as TaskAdapter.TaskViewHolder).getTask
                 taskViewModel.deleteTask(task)
             }
-
         })
         itemTouchHelper.attachToRecyclerView(recycler)
     }
