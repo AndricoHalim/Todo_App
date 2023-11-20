@@ -11,12 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.todoapp.R
 import com.dicoding.todoapp.data.Task
 import com.dicoding.todoapp.databinding.ActivityAddTaskBinding
-import com.dicoding.todoapp.databinding.ActivityTaskDetailBinding
 import com.dicoding.todoapp.ui.ViewModelFactory
-import com.dicoding.todoapp.ui.detail.DetailTaskViewModel
 import com.dicoding.todoapp.utils.DatePickerFragment
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AddTaskActivity : AppCompatActivity(), DatePickerFragment.DialogDateListener {
     private var dueDateMillis: Long = System.currentTimeMillis()

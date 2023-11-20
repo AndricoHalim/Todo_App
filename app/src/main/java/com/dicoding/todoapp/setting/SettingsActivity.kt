@@ -2,7 +2,6 @@ package com.dicoding.todoapp.setting
 
 import android.Manifest
 import android.os.Bundle
-import android.provider.SyncStateContract.Constants
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
