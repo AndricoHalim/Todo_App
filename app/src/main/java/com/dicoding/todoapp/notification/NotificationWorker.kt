@@ -54,11 +54,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
             .setContentIntent(getPendingIntent(nearestTask))
             .setContentTitle(nearestTask.title)
             .setContentText(
-                "${nearestTask.description} - ${
-                    DateConverter.convertMillisToString(
-                        nearestTask.dueDateMillis
-                    )
-                }"
+                DateConverter.convertMillisToString(nearestTask.dueDateMillis)
             )
             .setSmallIcon(R.drawable.ic_notifications)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

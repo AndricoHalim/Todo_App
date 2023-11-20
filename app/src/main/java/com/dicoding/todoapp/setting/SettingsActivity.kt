@@ -9,10 +9,12 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.dicoding.todoapp.R
 import com.dicoding.todoapp.notification.NotificationWorker
 import com.dicoding.todoapp.utils.NOTIFICATION_CHANNEL_ID
+import java.util.concurrent.TimeUnit
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -58,10 +60,11 @@ class SettingsActivity : AppCompatActivity() {
                     val data = Data.Builder()
                         .putString(NOTIFICATION_CHANNEL_ID, channelName)
                         .build()
-                    val oneTimeWorkRequest = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+                    val periodicWorkRequest = PeriodicWorkRequest.Builder(NotificationWorker::class.java,1,
+                        TimeUnit.DAYS)
                         .setInputData(data)
                         .build()
-                    workManager.enqueue(oneTimeWorkRequest)
+                    workManager.enqueue(periodicWorkRequest)
                 } else {
                     workManager.cancelAllWorkByTag(NotificationWorker::class.java.simpleName)
                 }
