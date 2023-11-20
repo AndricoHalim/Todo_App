@@ -2,13 +2,18 @@ package com.dicoding.todoapp.setting
 
 import android.Manifest
 import android.os.Bundle
+import android.provider.SyncStateContract.Constants
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.dicoding.todoapp.R
+import com.dicoding.todoapp.notification.NotificationWorker
+import com.dicoding.todoapp.utils.NOTIFICATION_CHANNEL_ID
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -44,14 +49,25 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
-            val prefNotification = findPreference<SwitchPreference>(getString(R.string.pref_key_notify))
+            val prefNotification =
+                findPreference<SwitchPreference>(getString(R.string.pref_key_notify))
             prefNotification?.setOnPreferenceChangeListener { preference, newValue ->
                 val channelName = getString(R.string.notify_channel_name)
                 //TODO 13 : Schedule and cancel daily reminder using WorkManager with data channelName
+                val workManager = WorkManager.getInstance(requireContext())
+                if (newValue as Boolean) {
+                    val data = Data.Builder()
+                        .putString(NOTIFICATION_CHANNEL_ID, channelName)
+                        .build()
+                    val oneTimeWorkRequest = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+                        .setInputData(data)
+                        .build()
+                    workManager.enqueue(oneTimeWorkRequest)
+                } else {
+                    workManager.cancelAllWorkByTag(NotificationWorker::class.java.simpleName)
+                }
                 true
             }
-
         }
     }
 }
