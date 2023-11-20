@@ -11,7 +11,8 @@ import com.dicoding.todoapp.utils.TASK_ID
 
 class DetailTaskActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityTaskDetailBinding
+    private var _binding: ActivityTaskDetailBinding? = null
+    private val binding get() = _binding!!
 
     private val detailViewModel by viewModels<DetailTaskViewModel> {
         ViewModelFactory.getInstance(application)
@@ -20,7 +21,7 @@ class DetailTaskActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTaskDetailBinding.inflate(layoutInflater)
+        _binding = ActivityTaskDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //TODO 11 : Show detail task and implement delete action
